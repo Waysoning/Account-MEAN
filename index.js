@@ -2,17 +2,28 @@ const express = require('express');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
+require('dotenv').config();
+const Sequelize = require('sequelize');
+// TODO: add passport config
+
+const sequelize = new Sequelize({
+  database: process.env.database,
+  username: process.env.username,
+  password: process.env.password,
+  host: process.env.host,
+  dialect: 'mysql',
+  logging: false,
+});
 
 const app = express();
 
-// TODO connect to MySQL
 // TODO: Add routes
 
 app.use(bodyParser.json());
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
-    keys: 123,
+    keys: [process.env.COOKIE_KEY],
   })
 );
 app.use(passport.initialize());
@@ -20,5 +31,9 @@ app.use(passport.session());
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log('Example app listening on port 4000!');
+  sequelize
+    .sync()
+    .then(() => console.log('Models synced with database'))
+    .catch((err) => console.error(err));
+  console.log(`Example app listening on port ${PORT}!`);
 });
