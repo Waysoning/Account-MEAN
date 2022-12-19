@@ -14,10 +14,9 @@ const sequelize = new Sequelize({
   dialect: 'mysql',
   logging: false,
 });
+require('./models/User')(sequelize);
 
 const app = express();
-
-// TODO: Add routes
 
 app.use(bodyParser.json());
 app.use(
@@ -28,6 +27,9 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+// TODO: Add routes
+require('./routes/authRoutes')(app, sequelize);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
