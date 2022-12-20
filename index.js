@@ -2,6 +2,7 @@ const express = require('express');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 require('dotenv').config();
 const Sequelize = require('sequelize');
 // TODO: add passport config
@@ -18,6 +19,7 @@ require('./models/User')(sequelize);
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(
   cookieSession({
