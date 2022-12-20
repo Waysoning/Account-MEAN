@@ -1,4 +1,4 @@
-<header>
+<header class="flex">
   <h1>Login</h1>
 </header>
 <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
@@ -13,3 +13,4 @@
   <div class="text-danger">{{errorMessage}}</div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+<a class="btn btn-secondary" href="http://localhost:4000/auth/google">Login With Google</a>

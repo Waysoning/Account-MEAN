@@ -6,16 +6,23 @@ module.exports = (sequelize) => {
     googleId: {
       type: Sequelize.STRING,
       unique: true,
+      allowNull: true,
     },
     username: {
       type: Sequelize.STRING,
       unique: true,
+      allowNull: true,
     },
-    password: Sequelize.STRING,
+    password: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
   });
   User.beforeCreate(async (user, options) => {
-    const hashed = await Password.toHash(user.password);
-    user.password = hashed;
+    if (user.password) {
+      const hashed = await Password.toHash(user.password);
+      user.password = hashed;
+    }
   });
   User.prototype.comparePassword = async function (candidatePassword) {
     return await Password.compare(this.password, candidatePassword);

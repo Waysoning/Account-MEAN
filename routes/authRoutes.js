@@ -18,11 +18,11 @@ module.exports = (app, sequelize) => {
     const { username, password } = req.body;
     const user = await User.findOne({ where: { username } });
     if (!user) {
-      return res.status(StatusCodes.UNAUTHORIZED).send('Invalid username');
+      return res.status(StatusCodes.UNAUTHORIZED).send('Invalid credentials');
     }
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(StatusCodes.UNAUTHORIZED).send('Invalid password');
+      return res.status(StatusCodes.UNAUTHORIZED).send('Invalid credentials');
     }
     res.status(StatusCodes.OK).send(user);
   });
@@ -38,7 +38,7 @@ module.exports = (app, sequelize) => {
     '/auth/google/callback',
     passport.authenticate('google'),
     (req, res) => {
-      res.redirect('/home');
+      res.redirect('http://localhost:4200/home');
     }
   );
 
