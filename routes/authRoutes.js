@@ -1,4 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
+const passport = require('passport');
 
 module.exports = (app, sequelize) => {
   const User = sequelize.models.user;
@@ -26,13 +27,22 @@ module.exports = (app, sequelize) => {
     res.status(StatusCodes.OK).send(user);
   });
 
+  app.get(
+    '/auth/google',
+    passport.authenticate('google', {
+      scope: ['profile', 'email'],
+    })
+  );
+
+  app.get(
+    '/auth/google/callback',
+    passport.authenticate('google'),
+    (req, res) => {
+      res.redirect('/home');
+    }
+  );
+
   app.get('/api/logout', (req, res) => {
-    // req.logout(function (err) {
-    //   if (err) {
-    //     return next(err);
-    //   }
-    //   res.redirect('/');
-    // });
     res.status(StatusCodes.OK).send('Logged out');
   });
 };

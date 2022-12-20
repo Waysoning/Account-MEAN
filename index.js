@@ -5,13 +5,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 const Sequelize = require('sequelize');
-// TODO: add passport config
 
 const sequelize = new Sequelize({
-  database: process.env.database,
-  username: process.env.username,
-  password: process.env.password,
-  host: process.env.host,
+  database: process.env.DATABASE,
+  username: process.env.USERNAME,
+  password: process.env.PASSWORD,
+  host: process.env.HOST,
   dialect: 'mysql',
   logging: false,
 });
@@ -27,10 +26,10 @@ app.use(
     keys: [process.env.COOKIE_KEY],
   })
 );
+require('./services/passport')(passport, sequelize);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// TODO: Add routes
 require('./routes/authRoutes')(app, sequelize);
 
 const PORT = process.env.PORT || 4000;
