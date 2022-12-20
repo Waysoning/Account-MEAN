@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoginService } from './login.service';
 
 @Component({
@@ -9,8 +10,9 @@ import { LoginService } from './login.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup = new FormGroup({});
+  errorMessage: string = '';
 
-  constructor(private loginService: LoginService) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   ngOnInit() {
     this.loginForm = new FormGroup({
@@ -20,11 +22,14 @@ export class LoginComponent implements OnInit {
   }
 
   login(user: any) {
-    console.log(this.loginForm.value);
-    this.loginService.login(this.loginForm.value).subscribe((res) => {
-      // TODO: Handle login response: redirect to home page, display error message, etc.
-      console.log('Login successful!');
-      console.log(res);
-    });
+    this.loginService.login(this.loginForm.value).subscribe(
+      (res) => {
+        this.router.navigate(['/home']);
+      },
+      (err) => {
+        console.log('Invalid credentials');
+        this.errorMessage = 'Invalid credentials';
+      }
+    );
   }
 }
