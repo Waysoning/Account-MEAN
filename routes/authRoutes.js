@@ -5,7 +5,6 @@ module.exports = (app, sequelize) => {
 
   app.post('/api/signup', async (req, res) => {
     const { username, password } = req.body;
-    // cannot create user if username already exists
     const existingUser = await User.findOne({ where: { username } });
     if (existingUser) {
       return res.status(StatusCodes.BAD_REQUEST).send('Username in use');
